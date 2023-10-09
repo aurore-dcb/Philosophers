@@ -6,35 +6,36 @@
 #    By: aducobu <aducobu@student.42.fr>            +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2023/10/06 13:19:38 by aducobu           #+#    #+#              #
-#    Updated: 2023/10/09 14:07:27 by aducobu          ###   ########.fr        #
+#    Updated: 2023/10/09 15:23:57 by aducobu          ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
 NAME = 			philo
 
-SRCS = 			main.c parsing.c
+SRCS = 			sources/main.c sources/parsing.c sources/list_philo.c sources/routine.c
 
-OBJS = 			${SRCS:%.c=objects/%.o}
+OBJS = 			$(SRCS:sources/%.c=objects/%.o)
 
 CC = cc
-CFLAGS = -Wall -Wextra -Werror
+CFLAGS = -Wall -Wextra -Werror -g3
+HEADER = philo.h
 PHILO_FLAG = -pthread
 RM = rm -rf
 
-all: ${NAME}
+all: $(NAME)
 
-${NAME}: ${OBJS} Makefile
-	${CC} ${CFLAGS} -o ${NAME} ${OBJS} ${CFLAGS} ${PHILO_FLAG}
+$(NAME): $(OBJS) Makefile include/philo.h	
+	$(CC) $(CFLAGS) -o $(NAME) $(OBJS) $(PHILO_FLAG)
 	
-objects/%.o: %.c
+objects/%.o: sources/%.c
 	mkdir -p $(dir $@)
-	${CC} ${CFLAGS} -c -o $@ $^
+	$(CC) $(CFLAGS) -c -o $@ $^
 
 clean:
-	${RM} objects
+	$(RM) objects
 
 fclean: clean
-	${RM} ${NAME}
+	$(RM) $(NAME)
 
 re: fclean all
 
