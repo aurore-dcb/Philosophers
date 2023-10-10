@@ -6,7 +6,7 @@
 /*   By: aducobu <aducobu@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/09 11:51:44 by aducobu           #+#    #+#             */
-/*   Updated: 2023/10/09 15:06:54 by aducobu          ###   ########.fr       */
+/*   Updated: 2023/10/10 09:56:11 by aducobu          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,10 +20,13 @@
 
 typedef struct s_data
 {
-	int				num;
 	pthread_t		philo;
+	int				num;
 	struct s_data	*next;
 }					t_data;
+
+void				free_lst_philo(t_data **philo);
+void				destroy_forks(int nb_philo, pthread_mutex_t *forks);
 
 int					ft_atoi(const char *str);
 int					parsing(int argc, char **argv, char **env);

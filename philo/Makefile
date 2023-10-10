@@ -6,13 +6,14 @@
 #    By: aducobu <aducobu@student.42.fr>            +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2023/10/06 13:19:38 by aducobu           #+#    #+#              #
-#    Updated: 2023/10/09 15:23:57 by aducobu          ###   ########.fr        #
+#    Updated: 2023/10/10 09:23:53 by aducobu          ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
 NAME = 			philo
 
-SRCS = 			sources/main.c sources/parsing.c sources/list_philo.c sources/routine.c
+SRCS = 			sources/main.c sources/parsing.c sources/list_philo.c sources/routine.c \
+				sources/frees.c
 
 OBJS = 			$(SRCS:sources/%.c=objects/%.o)
 
