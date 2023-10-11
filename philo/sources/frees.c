@@ -6,7 +6,7 @@
 /*   By: aducobu <aducobu@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/10 09:22:55 by aducobu           #+#    #+#             */
-/*   Updated: 2023/10/10 11:19:56 by aducobu          ###   ########.fr       */
+/*   Updated: 2023/10/11 13:35:09 by aducobu          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,6 +17,8 @@ void	free_lst_philo(t_data **philo)
 	t_data	*curr;
 
 	curr = *philo;
+	if (!curr)
+		return ;
 	while (*philo)
 	{
 		curr = *philo;

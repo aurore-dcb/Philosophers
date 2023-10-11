@@ -6,46 +6,77 @@
 /*   By: aducobu <aducobu@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/09 15:06:22 by aducobu           #+#    #+#             */
-/*   Updated: 2023/10/10 12:59:18 by aducobu          ###   ########.fr       */
+/*   Updated: 2023/10/11 16:13:01 by aducobu          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../include/philo.h"
 
-void *routine(void *arg)
+void	take_forks(t_data *philo)
 {
-    int i;
-    int k;
-    int result;
-    t_data *elem = (t_data *)arg;
+	int left;
+	int right;
+	
+	left = philo->num % philo->nb_philo;
+	right = philo->num - 1;
+	if (philo->num % 2 == 0)
+	{
+		pthread_mutex_lock(&philo->forks[right]);
+		printf("tmp - %d - has taken a fork right(%d)\n", philo->num, right); // rajouter le temps
+		pthread_mutex_lock(&philo->forks[left]);
+		printf("tmp - %d - has taken a fork left(%d)\n", philo->num, left); // rajouter le temps
+	}
+	else
+	{
+		pthread_mutex_lock(&philo->forks[left]);
+		printf("tmp - %d - has taken a fork left(%d)\n", philo->num, left); // rajouter le temps
+		pthread_mutex_lock(&philo->forks[right]);
+		printf("tmp - %d - has taken a fork right(%d)\n", philo->num, right); // rajouter le temps
+	}
+}
 
-    int num = elem->num;
-    // printf("Je suis le philo %d\n", num);
-    if (num % 2 == 0)// philo pair
-        i = num - 1;
-    else // philo impair
-        i = num % elem->nb_philo;
-    result = pthread_mutex_lock(&elem->forks[i]);
-    if (result == 0) {
-        printf("Je suis le philo %d - J'ai pris la fourchette %d\n", num, i);
-        pthread_mutex_unlock(&elem->forks[i]);
-    } else {
-        printf("Impossible de verrouiller le mutex dans le maillon %d\n", num);
-    }
-    if (num % 2 == 0)// philo pair
-        k = num % elem->nb_philo;
-    else // philo impair
-        k = num - 1;
-    if (result == 0) {
-        printf("Je suis le philo %d - J'ai pris la fourchette %d\n", num, k);
-        pthread_mutex_unlock(&elem->forks[k]);
-    } else {
-        printf("Impossible de verrouiller le mutex dans le maillon %d\n", num);
-    }
-    //manger avant de relacher les deux fourchettes
-    
-    pthread_mutex_unlock(&elem->forks[i]);
-    pthread_mutex_unlock(&elem->forks[k]);
-    return (NULL);
-    
+void	give_forks(t_data *philo)
+{
+	int left;
+	int right;
+	
+	left = philo->num % philo->nb_philo;
+	right = philo->num - 1;
+	if (philo->num % 2 == 0)
+	{
+		pthread_mutex_unlock(&philo->forks[right]);
+		pthread_mutex_unlock(&philo->forks[left]);
+	}
+	else
+	{
+		pthread_mutex_unlock(&philo->forks[left]);
+		pthread_mutex_unlock(&philo->forks[right]);
+	}
+}
+
+void	*routine(void *arg)
+{
+	long int		time1;
+	long int		time2;
+	t_data			*philo;
+	struct timeval	init_time;
+
+	philo = (t_data *)arg;
+	while (1)
+	{
+		take_forks(philo);
+		gettimeofday(&init_time, NULL);
+		time1 = init_time.tv_sec * 1000000 + init_time.tv_sec;
+		printf("tmp - %d - is eating\n", philo->num);
+		// printf("tmp %ld- %d - is eating\n", time1, philo->num);
+		my_usleep(philo->time_to_eat);
+		gettimeofday(&init_time, NULL);
+		time2 = init_time.tv_sec * 1000000 + init_time.tv_sec;
+		// printf("tmp %ld- %d - is sleeping\n", time2, philo->num);
+		printf("diff philo %d = %ld\n", philo->num, (time2  - time1) / 1000);
+		give_forks(philo);
+		printf("tmp - %d - is sleeping\n", philo->num);
+		my_usleep(philo->time_to_sleep);
+	}
+	return (NULL);
 }
