@@ -6,7 +6,7 @@
 /*   By: aducobu <aducobu@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/09 11:51:44 by aducobu           #+#    #+#             */
-/*   Updated: 2023/10/11 10:56:58 by aducobu          ###   ########.fr       */
+/*   Updated: 2023/10/11 16:33:06 by aducobu          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,7 +27,8 @@ typedef struct s_data
 	int				time_to_die;
 	int				time_to_eat;
 	int				time_to_sleep;
-	int				init_time; //microseconde
+	int				init_time;
+	pthread_mutex_t printf_mutex;
 	int				nb_philo;
 	struct s_data	*next;
 }					t_data;
@@ -38,7 +39,8 @@ void				destroy_forks(int nb_philo, pthread_mutex_t *forks);
 int					ft_atoi(const char *str);
 int					parsing(int argc, char **argv, char **env);
 
-t_data				*lst_new(int num, char **argv, pthread_mutex_t *forks, int time);
+t_data				*lst_new(int num, char **argv, pthread_mutex_t *forks,
+						int time);
 int					lst_add_back(t_data **philo, t_data *new);
 int					create_list_philo(t_data **philo, char **argv,
 						pthread_mutex_t *forks, int time);

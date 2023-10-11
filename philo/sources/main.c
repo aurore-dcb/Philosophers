@@ -6,7 +6,7 @@
 /*   By: aducobu <aducobu@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/06 13:06:10 by aducobu           #+#    #+#             */
-/*   Updated: 2023/10/11 15:57:33 by aducobu          ###   ########.fr       */
+/*   Updated: 2023/10/11 16:30:31 by aducobu          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -68,6 +68,7 @@ int	main(int argc, char **argv, char **env)
 {
 	t_data			*philo;
 	pthread_mutex_t	*forks;
+	pthread_mutex_t printf_mutex;
 	int				time =  0;
 
 	philo = NULL;
@@ -76,13 +77,13 @@ int	main(int argc, char **argv, char **env)
 		return (1);
 	// creation du tableau de mutex = les fourchettes
 	forks = create_forks(ft_atoi(argv[1]));
-	// pthread_mutex_lock(&forks[1]);
+	// creation du mutex pour printf
+	pthread_mutex_init(&printf_mutex, NULL);
 	// creation des threads = philos
 	if (!create_list_philo(&philo, argv, forks, time))
 		return (printf("Error while execution\n"), 1);
 	if (!ft_wait(&philo))
 		return (1);
-	// pthread_mutex_unlock(&forks[1]);
 	destroy_forks(ft_atoi(argv[1]), forks);
 	free_lst_philo(&philo);
 	return (0);
