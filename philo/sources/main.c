@@ -6,7 +6,7 @@
 /*   By: aducobu <aducobu@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/06 13:06:10 by aducobu           #+#    #+#             */
-/*   Updated: 2023/10/12 11:02:34 by aducobu          ###   ########.fr       */
+/*   Updated: 2023/10/12 15:16:56 by aducobu          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -66,9 +66,10 @@ void	my_usleep(unsigned int time_to_wait)
 
 void	init_main(t_init *all, char **argv, int argc)
 {
-	all->philo = NULL;
 	all->argv = argv;
 	all->argc = argc;
+	// temps du debut du programme
+	gettimeofday(&all->init_time, NULL);
 	// creation du tableau de mutex = les fourchettes
 	all->forks = create_forks(ft_atoi(argv[1]));
 	// creation du mutex pour printf
@@ -78,6 +79,7 @@ void	init_main(t_init *all, char **argv, int argc)
 int	main(int argc, char **argv, char **env)
 {
 	t_init			all;
+	t_data			*philo;
 
 	if (!parsing(argc, argv, env))
 		return (1);
