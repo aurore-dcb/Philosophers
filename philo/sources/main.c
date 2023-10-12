@@ -6,7 +6,7 @@
 /*   By: aducobu <aducobu@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/06 13:06:10 by aducobu           #+#    #+#             */
-/*   Updated: 2023/10/11 16:30:31 by aducobu          ###   ########.fr       */
+/*   Updated: 2023/10/12 11:02:34 by aducobu          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -64,27 +64,30 @@ void	my_usleep(unsigned int time_to_wait)
 	}
 }
 
+void	init_main(t_init *all, char **argv, int argc)
+{
+	all->philo = NULL;
+	all->argv = argv;
+	all->argc = argc;
+	// creation du tableau de mutex = les fourchettes
+	all->forks = create_forks(ft_atoi(argv[1]));
+	// creation du mutex pour printf
+	pthread_mutex_init(&all->printf_mutex, NULL);
+}
+
 int	main(int argc, char **argv, char **env)
 {
-	t_data			*philo;
-	pthread_mutex_t	*forks;
-	pthread_mutex_t printf_mutex;
-	int				time =  0;
+	t_init			all;
 
-	philo = NULL;
-	forks = NULL;
 	if (!parsing(argc, argv, env))
 		return (1);
-	// creation du tableau de mutex = les fourchettes
-	forks = create_forks(ft_atoi(argv[1]));
-	// creation du mutex pour printf
-	pthread_mutex_init(&printf_mutex, NULL);
+	init_main(&all, argv, argc);
 	// creation des threads = philos
-	if (!create_list_philo(&philo, argv, forks, time))
+	if (!create_list_philo(&all, argv))
 		return (printf("Error while execution\n"), 1);
-	if (!ft_wait(&philo))
+	if (!ft_wait(&all.philo))
 		return (1);
-	destroy_forks(ft_atoi(argv[1]), forks);
-	free_lst_philo(&philo);
+	destroy_forks(ft_atoi(argv[1]), all.forks);
+	free_lst_philo(&all.philo);
 	return (0);
 }

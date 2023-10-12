@@ -6,7 +6,7 @@
 /*   By: aducobu <aducobu@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/09 11:51:44 by aducobu           #+#    #+#             */
-/*   Updated: 2023/10/11 16:33:06 by aducobu          ###   ########.fr       */
+/*   Updated: 2023/10/12 10:55:05 by aducobu          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,11 +27,22 @@ typedef struct s_data
 	int				time_to_die;
 	int				time_to_eat;
 	int				time_to_sleep;
-	int				init_time;
-	pthread_mutex_t printf_mutex;
+	struct timeval	init_time;
+	pthread_mutex_t	printf_mutex;
 	int				nb_philo;
+	int				meals;
 	struct s_data	*next;
 }					t_data;
+
+typedef struct s_init
+{
+	char			**argv;
+	int				argc;
+	pthread_mutex_t	*forks;
+	t_data			*philo;
+	struct timeval	init_time;
+	pthread_mutex_t	printf_mutex;
+}					t_init;
 
 void				free_lst_philo(t_data **philo);
 void				destroy_forks(int nb_philo, pthread_mutex_t *forks);
@@ -39,11 +50,9 @@ void				destroy_forks(int nb_philo, pthread_mutex_t *forks);
 int					ft_atoi(const char *str);
 int					parsing(int argc, char **argv, char **env);
 
-t_data				*lst_new(int num, char **argv, pthread_mutex_t *forks,
-						int time);
+t_data				*lst_new(int num, char **argv, t_init *data);
 int					lst_add_back(t_data **philo, t_data *new);
-int					create_list_philo(t_data **philo, char **argv,
-						pthread_mutex_t *forks, int time);
+int					create_list_philo(t_init *data, char **argv);
 
 void				*routine(void *arg);
 
