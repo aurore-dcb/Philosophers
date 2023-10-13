@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   routine.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: aducobu <aducobu@student.42.fr>            +#+  +:+       +#+        */
+/*   By: aurore <aurore@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/09 15:06:22 by aducobu           #+#    #+#             */
-/*   Updated: 2023/10/12 15:07:46 by aducobu          ###   ########.fr       */
+/*   Updated: 2023/10/13 10:44:31 by aurore           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,36 +22,32 @@ void	take_forks(t_data *philo, t_init *data)
 	right = philo->num - 1;
 	if (philo->num % 2 == 0)
 	{
-		pthread_mutex_lock(&philo->forks[right]);
+		pthread_mutex_lock(&data->forks[right]);
 		pthread_mutex_lock(&data->printf_mutex);
 		diff = get_actual_time() - ((data->init_time.tv_sec * 1000)
 				+ (data->init_time.tv_usec / 1000));
 		printf("%ld %d has taken a fork\n", diff, philo->num);
-		// rajouter le temps
 		pthread_mutex_unlock(&data->printf_mutex);
-		pthread_mutex_lock(&philo->forks[left]);
+		pthread_mutex_lock(&data->forks[left]);
 		pthread_mutex_lock(&data->printf_mutex);
 		diff = get_actual_time() - ((data->init_time.tv_sec * 1000)
 				+ (data->init_time.tv_usec / 1000));
 		printf("%ld %d has taken a fork\n", diff, philo->num);
-		// rajouter le temps
 		pthread_mutex_unlock(&data->printf_mutex);
 	}
 	else
 	{
-		pthread_mutex_lock(&philo->forks[left]);
+		pthread_mutex_lock(&data->forks[left]);
 		pthread_mutex_lock(&data->printf_mutex);
 		diff = get_actual_time() - ((data->init_time.tv_sec * 1000)
 				+ (data->init_time.tv_usec / 1000));
 		printf("%ld %d has taken a fork\n", diff, philo->num);
-		// rajouter le temps
 		pthread_mutex_unlock(&data->printf_mutex);
-		pthread_mutex_lock(&philo->forks[right]);
+		pthread_mutex_lock(&data->forks[right]);
 		pthread_mutex_lock(&data->printf_mutex);
 		diff = get_actual_time() - ((data->init_time.tv_sec * 1000)
 				+ (data->init_time.tv_usec / 1000));
 		printf("%ld %d has taken a fork\n", diff, philo->num);
-		// rajouter le temps
 		pthread_mutex_unlock(&data->printf_mutex);
 	}
 }
@@ -65,13 +61,13 @@ void	give_forks(t_data *philo, t_init *data)
 	right = philo->num - 1;
 	if (philo->num % 2 == 0)
 	{
-		pthread_mutex_unlock(&philo->forks[right]);
-		pthread_mutex_unlock(&philo->forks[left]);
+		pthread_mutex_unlock(&data->forks[right]);
+		pthread_mutex_unlock(&data->forks[left]);
 	}
 	else
 	{
-		pthread_mutex_unlock(&philo->forks[left]);
-		pthread_mutex_unlock(&philo->forks[right]);
+		pthread_mutex_unlock(&data->forks[left]);
+		pthread_mutex_unlock(&data->forks[right]);
 	}
 }
 

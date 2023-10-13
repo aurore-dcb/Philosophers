@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   philo.h                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: aducobu <aducobu@student.42.fr>            +#+  +:+       +#+        */
+/*   By: aurore <aurore@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/09 11:51:44 by aducobu           #+#    #+#             */
-/*   Updated: 2023/10/12 15:14:26 by aducobu          ###   ########.fr       */
+/*   Updated: 2023/10/13 10:42:27 by aurore           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,7 +30,6 @@ typedef struct s_init
 	pthread_mutex_t	printf_mutex;
 	int				nb_philo;
 	pthread_mutex_t	*forks;
-	// t_data			*philo;
 }					t_init;
 
 typedef struct s_data
@@ -39,7 +38,7 @@ typedef struct s_data
 	int				num;
 	struct timeval	last_meal;
 	int				meals;
-	pthread_mutex_t	*forks;
+	// pthread_mutex_t	*forks;
 	t_init			*data;
 	struct s_data	*next;
 }					t_data;
@@ -50,9 +49,9 @@ void				destroy_forks(int nb_philo, pthread_mutex_t *forks);
 int					ft_atoi(const char *str);
 int					parsing(int argc, char **argv, char **env);
 
-t_data				*lst_new(int num, t_data *philo);
+t_data	*lst_new(int num, t_init *data);
 int					lst_add_back(t_data **philo, t_data *new);
-int					create_list_philo(t_init *data, char **argv);
+int	create_list_philo(t_init *data, t_data *philo, char **argv);
 
 void				*routine(void *arg);
 

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: aducobu <aducobu@student.42.fr>            +#+  +:+       +#+        */
+/*   By: aurore <aurore@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/06 13:06:10 by aducobu           #+#    #+#             */
-/*   Updated: 2023/10/12 15:16:56 by aducobu          ###   ########.fr       */
+/*   Updated: 2023/10/13 10:30:53 by aurore           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -81,15 +81,16 @@ int	main(int argc, char **argv, char **env)
 	t_init			all;
 	t_data			*philo;
 
+	philo = NULL;
 	if (!parsing(argc, argv, env))
 		return (1);
 	init_main(&all, argv, argc);
 	// creation des threads = philos
-	if (!create_list_philo(&all, argv))
+	if (!create_list_philo(&all, philo, argv))
 		return (printf("Error while execution\n"), 1);
-	if (!ft_wait(&all.philo))
+	if (!ft_wait(&philo))
 		return (1);
 	destroy_forks(ft_atoi(argv[1]), all.forks);
-	free_lst_philo(&all.philo);
+	free_lst_philo(&philo);
 	return (0);
 }
