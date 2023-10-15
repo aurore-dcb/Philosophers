@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: aurore <aurore@student.42.fr>              +#+  +:+       +#+        */
+/*   By: aducobu <aducobu@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/06 13:06:10 by aducobu           #+#    #+#             */
-/*   Updated: 2023/10/13 10:30:53 by aurore           ###   ########.fr       */
+/*   Updated: 2023/10/15 10:04:57 by aducobu          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -68,6 +68,7 @@ void	init_main(t_init *all, char **argv, int argc)
 {
 	all->argv = argv;
 	all->argc = argc;
+	all->nb_philo = ft_atoi(argv[1]);
 	// temps du debut du programme
 	gettimeofday(&all->init_time, NULL);
 	// creation du tableau de mutex = les fourchettes
