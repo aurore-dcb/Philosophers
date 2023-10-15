@@ -6,7 +6,7 @@
 /*   By: aducobu <aducobu@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/09 11:51:44 by aducobu           #+#    #+#             */
-/*   Updated: 2023/10/15 10:04:26 by aducobu          ###   ########.fr       */
+/*   Updated: 2023/10/15 16:40:49 by aducobu          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,29 +16,31 @@
 # include <pthread.h>
 # include <stdio.h>
 # include <stdlib.h>
+# include <string.h>
 # include <sys/time.h>
 # include <unistd.h>
 
 typedef struct s_init
 {
-	char			**argv;
 	int				argc;
+	char			**argv;
 	int				time_to_die;
 	int				time_to_eat;
 	int				time_to_sleep;
 	struct timeval	init_time;
-	pthread_mutex_t	printf_mutex;
 	int				nb_philo;
 	pthread_mutex_t	*forks;
+	pthread_mutex_t	printf_mutex;
+	pthread_mutex_t	flag;
+	int				flag_death;
 }					t_init;
 
 typedef struct s_data
 {
 	pthread_t		philo;
 	int				num;
-	struct timeval	last_meal;
 	int				meals;
-	// pthread_mutex_t	*forks;
+	struct timeval	last_meal;
 	t_init			*data;
 	struct s_data	*next;
 }					t_data;
@@ -49,13 +51,11 @@ void				destroy_forks(int nb_philo, pthread_mutex_t *forks);
 int					ft_atoi(const char *str);
 int					parsing(int argc, char **argv, char **env);
 
-t_data	*lst_new(int num, t_init *data);
+t_data				*lst_new(int num, t_init *data);
 int					lst_add_back(t_data **philo, t_data *new);
-int	create_list_philo(t_init *data, t_data *philo, char **argv);
-
+int					create_list_philo(t_init *data, t_data **philo);
+int					create_monitor(t_data **philo, pthread_t *monitor);
 void				*routine(void *arg);
 
 void				my_usleep(unsigned int time_to_wait);
-
-long int			get_actual_time(void);
-#endif
+#endif%

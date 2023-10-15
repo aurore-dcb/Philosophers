@@ -6,7 +6,7 @@
 /*   By: aducobu <aducobu@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/09 15:05:23 by aducobu           #+#    #+#             */
-/*   Updated: 2023/10/15 09:58:21 by aducobu          ###   ########.fr       */
+/*   Updated: 2023/10/15 16:43:10 by aducobu          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,6 +25,8 @@ t_data	*lst_new(int num, t_init *data)
 		elem->meals = ft_atoi(data->argv[5]);
 	else
 		elem->meals = -2;
+	elem->last_meal = data->init_time;
+	elem->data = data;
 	elem->next = NULL;
 	if (pthread_create(&elem->philo, NULL, &routine, elem))
 	{
@@ -52,14 +54,14 @@ int	lst_add_back(t_data **philo, t_data *new)
 	return (1);
 }
 
-int	create_list_philo(t_init *data, t_data *philo, char **argv)
+int	create_list_philo(t_init *data, t_data **philo)
 {
 	int i;
 
 	i = 1;
-	while (i <= ft_atoi(argv[1]))
+	while (i <= data->nb_philo)
 	{
-		if (!lst_add_back(&philo, lst_new(i, data)))
+		if (!lst_add_back(philo, lst_new(i, data)))
 			return (0);
 		i++;
 	}
