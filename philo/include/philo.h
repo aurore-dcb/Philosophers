@@ -6,7 +6,7 @@
 /*   By: aducobu <aducobu@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/09 11:51:44 by aducobu           #+#    #+#             */
-/*   Updated: 2023/10/15 10:57:15 by aducobu          ###   ########.fr       */
+/*   Updated: 2023/10/15 16:31:26 by aducobu          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,9 +16,9 @@
 # include <pthread.h>
 # include <stdio.h>
 # include <stdlib.h>
+# include <string.h>
 # include <sys/time.h>
 # include <unistd.h>
-# include <string.h>
 
 typedef struct s_init
 {
@@ -31,6 +31,8 @@ typedef struct s_init
 	int				nb_philo;
 	pthread_mutex_t	*forks;
 	pthread_mutex_t	printf_mutex;
+	pthread_mutex_t	flag;
+	int				flag_death;
 }					t_init;
 
 typedef struct s_data
@@ -52,7 +54,7 @@ int					parsing(int argc, char **argv, char **env);
 t_data				*lst_new(int num, t_init *data);
 int					lst_add_back(t_data **philo, t_data *new);
 int					create_list_philo(t_init *data, t_data **philo);
-
+int					create_monitor(t_data **philo, pthread_t *monitor);
 void				*routine(void *arg);
 
 void				my_usleep(unsigned int time_to_wait);
