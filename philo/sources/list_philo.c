@@ -6,7 +6,7 @@
 /*   By: aducobu <aducobu@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/09 15:05:23 by aducobu           #+#    #+#             */
-/*   Updated: 2023/10/15 16:43:10 by aducobu          ###   ########.fr       */
+/*   Updated: 2023/10/16 10:18:50 by aducobu          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -56,7 +56,7 @@ int	lst_add_back(t_data **philo, t_data *new)
 
 int	create_list_philo(t_init *data, t_data **philo)
 {
-	int i;
+	int	i;
 
 	i = 1;
 	while (i <= data->nb_philo)
@@ -66,4 +66,19 @@ int	create_list_philo(t_init *data, t_data **philo)
 		i++;
 	}
 	return (1);
+}
+
+void	free_lst_philo(t_data **philo)
+{
+	t_data	*curr;
+
+	curr = *philo;
+	if (!curr)
+		return ;
+	while (*philo)
+	{
+		curr = *philo;
+		*philo = (*philo)->next;
+		free(curr);
+	}
 }

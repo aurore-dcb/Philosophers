@@ -6,70 +6,45 @@
 /*   By: aducobu <aducobu@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/09 15:06:22 by aducobu           #+#    #+#             */
-/*   Updated: 2023/10/15 16:45:13 by aducobu          ###   ########.fr       */
+/*   Updated: 2023/10/16 10:17:18 by aducobu          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../include/philo.h"
 
-void	take_forks(t_data *philo, t_init *data)
+void	ft_unlock(t_data *philo, t_init *data)
 {
-	int	left;
-	int	right;
-	struct timeval now;
-	int diff;
-
-	right = philo->num - 1;
-	left = philo->num % data->nb_philo;
-	if (philo->num % 2 == 0) // les philos pairs prennent la fourchette droite en premier
-	{
-		pthread_mutex_lock(&data->forks[right]);
-		pthread_mutex_lock(&data->printf_mutex);
-		gettimeofday(&now, NULL);
-		diff = ((now.tv_sec * 1000000 + now.tv_usec) - (data->init_time.tv_sec * 1000000 + data->init_time.tv_usec)) / 1000;
-		printf("%d %d has taken a fork\n", diff, philo->num);
-		pthread_mutex_unlock(&data->printf_mutex);
-		pthread_mutex_lock(&data->forks[left]);
-		pthread_mutex_lock(&data->printf_mutex);
-		gettimeofday(&now, NULL);
-		diff = ((now.tv_sec * 1000000 + now.tv_usec) - (data->init_time.tv_sec * 1000000 + data->init_time.tv_usec)) / 1000;
-		printf("%d %d has taken a fork\n", diff, philo->num);
-		pthread_mutex_unlock(&data->printf_mutex);
-	}
-	else // les philos impairs prennent la fourchette gauche en premier
-	{
-		pthread_mutex_lock(&data->forks[left]);
-		pthread_mutex_lock(&data->printf_mutex);
-		gettimeofday(&now, NULL);
-		diff = ((now.tv_sec * 1000000 + now.tv_usec) - (data->init_time.tv_sec * 1000000 + data->init_time.tv_usec)) / 1000;
-		printf("%d %d has taken a fork\n", diff, philo->num);
-		pthread_mutex_unlock(&data->printf_mutex);
-		pthread_mutex_lock(&data->forks[right]);
-		pthread_mutex_lock(&data->printf_mutex);
-		gettimeofday(&now, NULL);
-		diff = ((now.tv_sec * 1000000 + now.tv_usec) - (data->init_time.tv_sec * 1000000 + data->init_time.tv_usec)) / 1000;
-		printf("%d %d has taken a fork\n", diff, philo->num);
-		pthread_mutex_unlock(&data->printf_mutex);
-	}
+	pthread_mutex_unlock(&data->forks[philo->num - 1]);
+	pthread_mutex_unlock(&data->forks[philo->num % data->nb_philo]);
 }
 
-void	give_forks(t_data *philo, t_init *data)
+int	ft_print(t_init *data, t_data *philo, int act)
 {
-	int	left;
-	int	right;
+	struct timeval	now;
+	int				diff;
 
-	left = philo->num % data->nb_philo;
-	right = philo->num - 1;
-	if (philo->num % 2 == 0)
+	pthread_mutex_lock(&data->printf_mutex);
+	if (ft_check_flag(data))
+		return (pthread_mutex_unlock(&data->printf_mutex), 1);
+	gettimeofday(&now, NULL);
+	diff = ((now.tv_sec * 1000000 + now.tv_usec) - (data->init_time.tv_sec
+				* 1000000 + data->init_time.tv_usec)) / 1000;
+	if (act == 1)
+		printf("%d %d has taken a fork\n", diff, philo->num);
+	else if (act == 2)
 	{
-		pthread_mutex_unlock(&data->forks[right]);
-		pthread_mutex_unlock(&data->forks[left]);
+		printf("%d %d is eating\n", diff, philo->num);
+		philo->last_meal = now;
+		philo->meals--;
 	}
-	else
-	{
-		pthread_mutex_unlock(&data->forks[left]);
-		pthread_mutex_unlock(&data->forks[right]);
-	}
+	else if (act == 3)
+		printf("%d %d is sleeping\n", diff, philo->num);
+	else if (act == 4)
+		printf("%d %d is thinking\n", diff, philo->num);
+	else if (act == 5)
+		printf("%d %d died\n", diff, philo->num);
+	pthread_mutex_unlock(&data->printf_mutex);
+	return (0);
 }
 
 long int	get_actual_time(void)
@@ -77,78 +52,43 @@ long int	get_actual_time(void)
 	struct timeval	now;
 
 	gettimeofday(&now, NULL);
-	return ((now.tv_sec * 1000 + now.tv_usec / 1000)); // milliseconde
+	return ((now.tv_sec * 1000 + now.tv_usec / 1000));
+}
+
+int	ft_check_flag(t_init *data)
+{
+	pthread_mutex_lock(&data->flag);
+	if (data->flag_death == 1)
+		return (pthread_mutex_unlock(&data->flag), 1);
+	pthread_mutex_unlock(&data->flag);
+	return (0);
 }
 
 void	*routine(void *arg)
 {
 	t_data	*philo;
-	t_init	*data;
-	struct timeval now;
-	int diff;
 
 	philo = (t_data *)arg;
-	data = philo->data;
-	while (1)
+	while (philo->meals != 0)
 	{
-		// debut
-		pthread_mutex_lock(&data->flag);
-		pthread_mutex_lock(&data->printf_mutex);
-		pthread_mutex_unlock(&data->printf_mutex);
-		if (data->flag_death == 1)
-		{
-			// printf("----2.1----\n");
-			pthread_mutex_unlock(&data->flag);
+		if (ft_check_flag(philo->data))
 			return (NULL);
-		}
-		pthread_mutex_unlock(&data->flag);
-		// fin
-		take_forks(philo, data);
-		pthread_mutex_lock(&data->printf_mutex);
-		gettimeofday(&now, NULL);
-		diff = ((now.tv_sec * 1000000 + now.tv_usec) - (data->init_time.tv_sec * 1000000 + data->init_time.tv_usec)) / 1000;
-		printf("%d %d is eating\n", diff, philo->num);
-		philo->last_meal = now;
-		pthread_mutex_unlock(&data->printf_mutex);
+		if (take_forks(philo, philo->data))
+			return (NULL);
+		if (ft_print(philo->data, philo, 2))
+			return (ft_unlock(philo, philo->data), NULL);
+		my_usleep(philo->data->time_to_eat);
 		philo->meals--;
-		my_usleep(data->time_to_eat);
-		give_forks(philo, data);
-		// debut
-		pthread_mutex_lock(&data->flag);
-		pthread_mutex_lock(&data->printf_mutex);
-		pthread_mutex_unlock(&data->printf_mutex);
-		if (data->flag_death == 1)
-		{
-			// printf("----2.2----\n");
-			pthread_mutex_unlock(&data->flag);
+		give_forks(philo, philo->data);
+		if (ft_check_flag(philo->data))
 			return (NULL);
-		}
-		pthread_mutex_unlock(&data->flag);
-		// fin
-		pthread_mutex_lock(&data->printf_mutex);
-		gettimeofday(&now, NULL);
-		diff = ((now.tv_sec * 1000000 + now.tv_usec) - (data->init_time.tv_sec * 1000000 + data->init_time.tv_usec)) / 1000;
-		printf("%d %d is sleeping\n", diff, philo->num);
-		pthread_mutex_unlock(&data->printf_mutex);
-		my_usleep(data->time_to_sleep);
-		// debut
-		pthread_mutex_lock(&data->flag);
-		pthread_mutex_lock(&data->printf_mutex);
-		pthread_mutex_unlock(&data->printf_mutex);
-		if (data->flag_death == 1)
-		{
-			// printf("----2.3----\n");
-			pthread_mutex_unlock(&data->flag);
+		if (ft_print(philo->data, philo, 3))
 			return (NULL);
-		}
-		pthread_mutex_unlock(&data->flag);
-		// fin
-		pthread_mutex_lock(&data->printf_mutex);
-		gettimeofday(&now, NULL);
-		diff = ((now.tv_sec * 1000000 + now.tv_usec) - (data->init_time.tv_sec * 1000000 + data->init_time.tv_usec)) / 1000;
-		printf("%d %d is thinking\n", diff, philo->num);
-		pthread_mutex_unlock(&data->printf_mutex);
+		my_usleep(philo->data->time_to_sleep);
+		if (ft_check_flag(philo->data))
+			return (NULL);
+		if (ft_print(philo->data, philo, 4))
+			return (NULL);
 	}
-	printf("trop mange\n");
 	return (NULL);
 }

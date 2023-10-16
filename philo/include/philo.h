@@ -6,7 +6,7 @@
 /*   By: aducobu <aducobu@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/09 11:51:44 by aducobu           #+#    #+#             */
-/*   Updated: 2023/10/15 16:40:49 by aducobu          ###   ########.fr       */
+/*   Updated: 2023/10/16 10:20:24 by aducobu          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,17 +45,24 @@ typedef struct s_data
 	struct s_data	*next;
 }					t_data;
 
-void				free_lst_philo(t_data **philo);
-void				destroy_forks(int nb_philo, pthread_mutex_t *forks);
-
 int					ft_atoi(const char *str);
-int					parsing(int argc, char **argv, char **env);
-
+int					parsing(int argc, char **argv);
+int					take_forks(t_data *philo, t_init *data);
+void				give_forks(t_data *philo, t_init *data);
+pthread_mutex_t		*create_forks(int nb_philo);
+void				destroy_forks(int nb_philo, pthread_mutex_t *forks);
+int					ft_wait(t_data **philo, pthread_t monitor);
+void				my_usleep(unsigned int time_to_wait);
+int					ft_print(t_init *data, t_data *philo, int act);
+int					ft_check_flag(t_init *data);
+void				*routine(void *arg);
+int					check_meals(t_data *philo);
+int					check_death(t_data *philo);
+void				*death_monitor(void *arg);
+int					create_monitor(t_data **philo, pthread_t *monitor);
 t_data				*lst_new(int num, t_init *data);
 int					lst_add_back(t_data **philo, t_data *new);
 int					create_list_philo(t_init *data, t_data **philo);
-int					create_monitor(t_data **philo, pthread_t *monitor);
-void				*routine(void *arg);
+void				free_lst_philo(t_data **philo);
 
-void				my_usleep(unsigned int time_to_wait);
-#endif%
+#endif

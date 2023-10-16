@@ -6,7 +6,7 @@
 /*   By: aducobu <aducobu@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/09 11:49:00 by aducobu           #+#    #+#             */
-/*   Updated: 2023/10/09 15:21:32 by aducobu          ###   ########.fr       */
+/*   Updated: 2023/10/16 10:20:16 by aducobu          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,12 +39,11 @@ int	ft_atoi(const char *str)
 	return (n);
 }
 
-int	parsing(int argc, char **argv, char **env)
+int	parsing(int argc, char **argv)
 {
 	int	i;
 	int	num;
 
-	(void)env;
 	i = 1;
 	if (!(argc == 5 || argc == 6))
 		return (printf("Error parsing : wrong number of arguments\n"), 0);
@@ -62,7 +61,9 @@ int	parsing(int argc, char **argv, char **env)
 		i++;
 	}
 	if (ft_atoi(argv[1]) > 200)
-		return (printf("Error parsing : The number of philosophers is too high"),
-			0);
+	{
+		printf("Error parsing : The number of philosophers is too high");
+		return (0);
+	}
 	return (1);
 }
