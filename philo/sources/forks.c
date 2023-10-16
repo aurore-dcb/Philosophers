@@ -6,7 +6,7 @@
 /*   By: aducobu <aducobu@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/16 10:05:38 by aducobu           #+#    #+#             */
-/*   Updated: 2023/10/16 10:15:03 by aducobu          ###   ########.fr       */
+/*   Updated: 2023/10/16 10:57:03 by aducobu          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,25 +14,24 @@
 
 int	take_forks(t_data *philo, t_init *data)
 {
-	int	left;
-	int	right;
-
 	if (ft_check_flag(data))
 		return (1);
-	right = philo->num - 1;
-	left = philo->num % data->nb_philo;
 	if (philo->num % 2 == 0)
 	{
-		pthread_mutex_lock(&data->forks[right]);
+		pthread_mutex_lock(&data->forks[philo->num - 1]);
 		ft_print(data, philo, 1);
-		pthread_mutex_lock(&data->forks[left]);
+		if (data->nb_philo == 1 || ft_check_flag(data))
+			return (pthread_mutex_unlock(&data->forks[philo->num - 1]), 1);
+		pthread_mutex_lock(&data->forks[philo->num % data->nb_philo]);
 		ft_print(data, philo, 1);
 	}
 	else
 	{
-		pthread_mutex_lock(&data->forks[left]);
+		pthread_mutex_lock(&data->forks[philo->num % data->nb_philo]);
 		ft_print(data, philo, 1);
-		pthread_mutex_lock(&data->forks[right]);
+		if (data->nb_philo == 1 || ft_check_flag(data))
+			return (pthread_mutex_unlock(&data->forks[philo->num % data->nb_philo]), 1);
+		pthread_mutex_lock(&data->forks[philo->num - 1]);
 		ft_print(data, philo, 1);
 	}
 	return (0);

@@ -6,7 +6,7 @@
 /*   By: aducobu <aducobu@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/16 10:10:38 by aducobu           #+#    #+#             */
-/*   Updated: 2023/10/16 10:15:49 by aducobu          ###   ########.fr       */
+/*   Updated: 2023/10/16 14:51:36 by aducobu          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,7 +31,9 @@ int	ft_wait(t_data **philo, pthread_t monitor)
 		perror("Failed to join thread");
 		return (0);
 	}
-	pthread_mutex_destroy(&(*philo)->data->flag);
+	// pthread_mutex_destroy(&(*philo)->data->flag_mutex);
+	// pthread_mutex_destroy(&(*philo)->data->printf_mutex);
+	// pthread_mutex_destroy(&(*philo)->data->eat_mutex);
 	return (1);
 }
 
