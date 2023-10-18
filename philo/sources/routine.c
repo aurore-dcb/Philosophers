@@ -6,19 +6,19 @@
 /*   By: aducobu <aducobu@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/09 15:06:22 by aducobu           #+#    #+#             */
-/*   Updated: 2023/10/16 13:30:29 by aducobu          ###   ########.fr       */
+/*   Updated: 2023/10/18 15:32:54 by aducobu          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../include/philo.h"
 
-void	ft_unlock(t_data *philo, t_init *data)
+void	ft_unlock(t_philo *philo, t_data *data)
 {
-	pthread_mutex_unlock(&data->forks[philo->num - 1]);
-	pthread_mutex_unlock(&data->forks[philo->num % data->nb_philo]);
+	pthread_mutex_unlock(&data->forks[philo->fork_r]);
+	pthread_mutex_unlock(&data->forks[philo->fork_l]);
 }
 
-int	ft_print(t_init *data, t_data *philo, int act)
+int	ft_print(t_data *data, t_philo *philo, int act)
 {
 	struct timeval	now;
 	int				diff;
@@ -34,10 +34,10 @@ int	ft_print(t_init *data, t_data *philo, int act)
 	else if (act == 2)
 	{
 		printf("%d %d is eating\n", diff, philo->num);
-		pthread_mutex_lock(&philo->data->eat_mutex);
+		pthread_mutex_lock(&philo->eat_mutex);
 		philo->last_meal = now;
 		philo->meals--;
-		pthread_mutex_unlock(&philo->data->eat_mutex);
+		pthread_mutex_unlock(&philo->eat_mutex);
 	}
 	else if (act == 3)
 		printf("%d %d is sleeping\n", diff, philo->num);
@@ -57,7 +57,7 @@ long int	get_actual_time(void)
 	return ((now.tv_sec * 1000 + now.tv_usec / 1000));
 }
 
-int	ft_check_flag(t_init *data)
+int	ft_check_flag(t_data *data)
 {
 	pthread_mutex_lock(&data->flag_mutex);
 	if (data->flag_death == 1)
@@ -68,9 +68,9 @@ int	ft_check_flag(t_init *data)
 
 void	*routine(void *arg)
 {
-	t_data	*philo;
-
-	philo = (t_data *)arg;
+	t_philo	*philo;
+	
+	philo = (t_philo *)arg;
 	while (1)
 	{
 		if (ft_check_flag(philo->data))
@@ -90,6 +90,8 @@ void	*routine(void *arg)
 			return (NULL);
 		if (ft_print(philo->data, philo, 4))
 			return (NULL);
+		my_usleep(((philo->data->time_to_die - \
+			(philo->data->time_to_eat + philo->data->time_to_sleep)) / 2));
 	}
 	return (NULL);
 }
