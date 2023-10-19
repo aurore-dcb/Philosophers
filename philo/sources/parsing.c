@@ -6,7 +6,7 @@
 /*   By: aducobu <aducobu@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/09 11:49:00 by aducobu           #+#    #+#             */
-/*   Updated: 2023/10/16 10:20:16 by aducobu          ###   ########.fr       */
+/*   Updated: 2023/10/19 14:18:22 by aducobu          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,31 +39,29 @@ int	ft_atoi(const char *str)
 	return (n);
 }
 
-int	parsing(int argc, char **argv)
+int	parsing(int argc, char **argv, t_data *data)
 {
 	int	i;
 	int	num;
 
 	i = 1;
-	if (!(argc == 5 || argc == 6))
-		return (printf("Error parsing : wrong number of arguments\n"), 0);
-	while (i < argc)
+	if (argc >= 5 && argc <= 6)
 	{
-		if (!argv[i])
-			num = -1;
-		num = ft_atoi(argv[i]);
-		if (num < 0)
+		while (i < argc)
 		{
-			printf("Error parsing : wrong format of argument\n");
-			printf("You need to put positive number (integer) as arguments\n");
-			return (0);
+			if (!argv[i])
+				num = -1;
+			num = ft_atoi(argv[i]);
+			if (num < 0)
+			{
+				printf("Error parsing : wrong format of argument\n");
+				printf(
+					"You need to put positive number (integer) as arguments\n");
+				return (0);
+			}
+			i++;
 		}
-		i++;
+		return (init_data(data, argv, argc));
 	}
-	if (ft_atoi(argv[1]) > 200)
-	{
-		printf("Error parsing : The number of philosophers is too high");
-		return (0);
-	}
-	return (1);
+	return (0);
 }

@@ -1,41 +1,16 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   wait.c                                             :+:      :+:    :+:   */
+/*   utils.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: aducobu <aducobu@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2023/10/16 10:10:38 by aducobu           #+#    #+#             */
-/*   Updated: 2023/10/19 13:34:53 by aducobu          ###   ########.fr       */
+/*   Created: 2023/10/19 14:18:44 by aducobu           #+#    #+#             */
+/*   Updated: 2023/10/19 15:54:11 by aducobu          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../include/philo.h"
-
-int	ft_wait(t_data **philo, pthread_t monitor)
-{
-	t_data	*lst;
-
-	lst = *philo;
-	while (lst)
-	{
-		if (pthread_join(lst->philo, NULL))
-		{
-			perror("Failed to join thread");
-			return (0);
-		}
-		lst = lst->next;
-	}
-	if (pthread_join(monitor, NULL))
-	{
-		perror("Failed to join thread");
-		return (0);
-	}
-	// pthread_mutex_destroy(&(*philo)->data->flag_mutex);
-	// pthread_mutex_destroy(&(*philo)->data->printf_mutex);
-	// pthread_mutex_destroy(&(*philo)->data->eat_mutex);
-	return (1);
-}
 
 void	my_usleep(unsigned int time_to_wait)
 {
@@ -53,4 +28,38 @@ void	my_usleep(unsigned int time_to_wait)
 			break ;
 		usleep(100);
 	}
+}
+
+void	free_all(t_data *data)
+{
+	int	i;
+
+	i = 0;
+	while (i < data->nb_philo)
+	{
+		pthread_mutex_destroy(&data->forks[i]);
+		pthread_mutex_destroy(&data->philo[i].eat_mutex);
+		i++;
+	}
+	pthread_mutex_destroy(&data->printf_mutex);
+	pthread_mutex_destroy(&data->flag_mutex);
+	free(data->forks);
+	free(data->philo);
+}
+
+long int	get_actual_time(void)
+{
+	struct timeval	now;
+
+	gettimeofday(&now, NULL);
+	return ((now.tv_sec * 1000 + now.tv_usec / 1000));
+}
+
+int	ft_check_flag(t_data *data)
+{
+	pthread_mutex_lock(&data->flag_mutex);
+	if (data->flag_death == 1)
+		return (pthread_mutex_unlock(&data->flag_mutex), 1);
+	pthread_mutex_unlock(&data->flag_mutex);
+	return (0);
 }
