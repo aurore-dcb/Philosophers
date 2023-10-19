@@ -6,7 +6,7 @@
 /*   By: aducobu <aducobu@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/16 10:05:38 by aducobu           #+#    #+#             */
-/*   Updated: 2023/10/18 15:40:06 by aducobu          ###   ########.fr       */
+/*   Updated: 2023/10/19 13:18:49 by aducobu          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,20 +14,20 @@
 
 int	take_forks(t_philo *philo, t_data *data)
 {
-	if (ft_check_flag(data))
-		return (1);
+	// if (ft_check_flag(data))
+	// 	return (1);
 	if (philo->num % 2 == 0)
 		pthread_mutex_lock(&data->forks[philo->fork_r]);
 	else
 		pthread_mutex_lock(&data->forks[philo->fork_l]);
-	ft_print(data, philo, 1);
+	ft_print(data, philo, "has taken a fork");
 	if (philo->fork_r == philo->fork_l)
 		return (pthread_mutex_unlock(&data->forks[philo->fork_r]), 1);
 	if (philo->num % 2 == 0)
 		pthread_mutex_lock(&data->forks[philo->fork_l]);
 	else
 		pthread_mutex_lock(&data->forks[philo->fork_r]);
-	ft_print(data, philo, 1);
+	ft_print(data, philo, "has taken a fork");
 	return (0);
 }
 

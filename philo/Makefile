@@ -6,7 +6,7 @@
 #    By: aducobu <aducobu@student.42.fr>            +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2023/10/06 13:19:38 by aducobu           #+#    #+#              #
-#    Updated: 2023/10/18 15:41:58 by aducobu          ###   ########.fr        #
+#    Updated: 2023/10/19 12:31:05 by aducobu          ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -18,7 +18,7 @@ SRCS = 			sources/main.c sources/parsing.c sources/routine.c \
 OBJS = 			$(SRCS:sources/%.c=objects/%.o)
 
 CC = gcc
-CFLAGS = -Wall -Wextra -Werror -g3#-fsanitize=thread 
+CFLAGS = -Wall -Wextra -Werror #-fsanitize=thread -g3
 HEADER = philo.h
 PHILO_FLAG = -pthread
 RM = rm -rf

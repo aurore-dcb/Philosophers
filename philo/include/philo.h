@@ -6,7 +6,7 @@
 /*   By: aducobu <aducobu@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/09 11:51:44 by aducobu           #+#    #+#             */
-/*   Updated: 2023/10/18 15:41:23 by aducobu          ###   ########.fr       */
+/*   Updated: 2023/10/19 13:05:16 by aducobu          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,6 +41,7 @@ typedef struct s_data
 	int				time_to_eat;
 	int				time_to_sleep;
 	struct timeval	init_time;
+	int				nb_meals;
 	pthread_mutex_t	*forks;
 	t_philo			*philo;
 	pthread_mutex_t	printf_mutex;
@@ -50,13 +51,13 @@ typedef struct s_data
 }					t_data;
 
 // main
-void				init_data(t_data *data, char **argv, int argc);
+int					init_data(t_data *data, char **argv, int argc);
 int					init_philo_mutex(t_data *data);
 int					lauch_threads(t_data *data);
 void				free_all(t_data *data);
 // routine
 void				ft_unlock(t_philo *philo, t_data *data);
-int					ft_print(t_data *data, t_philo *philo, int act);
+void				ft_print(t_data *data, t_philo *philo, char *act);
 long int			get_actual_time(void);
 int					ft_check_flag(t_data *data);
 void				*routine(void *arg);
@@ -70,6 +71,6 @@ void				*monitor(void *arg);
 void				my_usleep(unsigned int time_to_wait);
 // parsing
 int					ft_atoi(const char *str);
-int					parsing(int argc, char **argv);
+int					parsing(int argc, char **argv, t_data *data);
 
 #endif

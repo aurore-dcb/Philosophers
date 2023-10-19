@@ -6,7 +6,7 @@
 /*   By: aducobu <aducobu@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/16 09:40:11 by aducobu           #+#    #+#             */
-/*   Updated: 2023/10/18 15:40:38 by aducobu          ###   ########.fr       */
+/*   Updated: 2023/10/19 13:13:18 by aducobu          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,7 +46,7 @@ int	check_death(t_data *data, t_philo *philo)
 	pthread_mutex_unlock(&philo->eat_mutex);
 	if (diff >= data->time_to_die)
 	{
-		ft_print(data, philo, 5);
+		ft_print(data, philo, "died");
 		pthread_mutex_lock(&data->flag_mutex);
 		data->flag_death = 1;
 		pthread_mutex_unlock(&data->flag_mutex);
