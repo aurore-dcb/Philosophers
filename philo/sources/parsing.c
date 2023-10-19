@@ -6,7 +6,7 @@
 /*   By: aducobu <aducobu@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/09 11:49:00 by aducobu           #+#    #+#             */
-/*   Updated: 2023/10/19 12:32:35 by aducobu          ###   ########.fr       */
+/*   Updated: 2023/10/19 14:18:22 by aducobu          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -55,7 +55,8 @@ int	parsing(int argc, char **argv, t_data *data)
 			if (num < 0)
 			{
 				printf("Error parsing : wrong format of argument\n");
-				printf("You need to put positive number (integer) as arguments\n");
+				printf(
+					"You need to put positive number (integer) as arguments\n");
 				return (0);
 			}
 			i++;

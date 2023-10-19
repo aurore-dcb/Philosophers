@@ -6,7 +6,7 @@
 /*   By: aducobu <aducobu@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/09 11:51:44 by aducobu           #+#    #+#             */
-/*   Updated: 2023/10/19 13:05:16 by aducobu          ###   ########.fr       */
+/*   Updated: 2023/10/19 14:15:04 by aducobu          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,7 +41,6 @@ typedef struct s_data
 	int				time_to_eat;
 	int				time_to_sleep;
 	struct timeval	init_time;
-	int				nb_meals;
 	pthread_mutex_t	*forks;
 	t_philo			*philo;
 	pthread_mutex_t	printf_mutex;
@@ -72,5 +71,4 @@ void				my_usleep(unsigned int time_to_wait);
 // parsing
 int					ft_atoi(const char *str);
 int					parsing(int argc, char **argv, t_data *data);
-
 #endif

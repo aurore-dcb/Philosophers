@@ -6,7 +6,7 @@
 /*   By: aducobu <aducobu@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/16 09:40:11 by aducobu           #+#    #+#             */
-/*   Updated: 2023/10/19 13:13:18 by aducobu          ###   ########.fr       */
+/*   Updated: 2023/10/19 14:15:26 by aducobu          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,7 +14,7 @@
 
 int	check_meals(t_data *data, t_philo *philo)
 {
-	int i;
+	int	i;
 
 	i = 0;
 	while (i < data->nb_philo)
@@ -57,8 +57,8 @@ int	check_death(t_data *data, t_philo *philo)
 
 void	*monitor(void *arg)
 {
-	int i;
-	t_data *data;
+	int		i;
+	t_data	*data;
 
 	i = 0;
 	data = (t_data *)arg;
