@@ -6,7 +6,7 @@
 /*   By: aducobu <aducobu@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/16 10:10:38 by aducobu           #+#    #+#             */
-/*   Updated: 2023/10/16 14:51:36 by aducobu          ###   ########.fr       */
+/*   Updated: 2023/10/19 13:34:53 by aducobu          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -51,5 +51,6 @@ void	my_usleep(unsigned int time_to_wait)
 		if ((current_time.tv_sec * 1000000 + current_time.tv_usec)
 			- start_time >= time_to_wait * 1000)
 			break ;
+		usleep(100);
 	}
 }
