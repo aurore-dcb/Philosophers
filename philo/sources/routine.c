@@ -6,7 +6,7 @@
 /*   By: aducobu <aducobu@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/09 15:06:22 by aducobu           #+#    #+#             */
-/*   Updated: 2023/10/20 13:30:09 by aducobu          ###   ########.fr       */
+/*   Updated: 2023/10/20 17:00:53 by aducobu          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,7 +14,6 @@
 
 void	ft_print(t_data *data, t_philo *philo, char *act)
 {
-	int			diff;
 	long long	now;
 
 	pthread_mutex_lock(&data->flag_mutex);
@@ -24,9 +23,8 @@ void	ft_print(t_data *data, t_philo *philo, char *act)
 		return ;
 	}
 	now = get_actual_time();
-	diff = now - data->init_time;
 	pthread_mutex_lock(&data->printf_mutex);
-	printf("%d %d %s\n", diff, philo->num, act);
+	printf("%lld %d %s\n", now - data->init_time, philo->num, act);
 	pthread_mutex_unlock(&data->printf_mutex);
 	pthread_mutex_unlock(&data->flag_mutex);
 }
@@ -83,7 +81,7 @@ int	check_meals(t_data *data)
 	while (i < data->nb_philo)
 	{
 		pthread_mutex_lock(&data->philo[i].eat_mutex);
-		if (data->philo[i].meals < data->meals)
+		if (data->philo[i].meals < data->n_meals)
 		{
 			pthread_mutex_unlock(&data->philo[i].eat_mutex);
 			return (0);
@@ -105,7 +103,7 @@ void	*monitor(void *arg)
 	data = (t_data *)arg;
 	while (1)
 	{
-		if (data->meals != -1 && check_meals(data))
+		if (data->n_meals != -1 && check_meals(data))
 			break ;
 		i = 0;
 		while (i < data->nb_philo)

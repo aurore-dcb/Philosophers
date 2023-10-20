@@ -17,7 +17,11 @@ int	main(int argc, char **argv)
 	t_data	data;
 
 	if (!parsing(argc, argv, &data))
+	{
+		printf("Error parsing : wrong argument(s)\n");
+		printf("You need to put 5 of 6 positive numbers (integer) as arguments\n");
 		return (1);
+	}
 	init_philo_mutex(&data);
 	free_all(&data);
 	return (0);
