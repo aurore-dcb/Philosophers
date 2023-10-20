@@ -6,37 +6,27 @@
 /*   By: aducobu <aducobu@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/09 11:49:00 by aducobu           #+#    #+#             */
-/*   Updated: 2023/10/19 14:18:22 by aducobu          ###   ########.fr       */
+/*   Updated: 2023/10/20 13:16:54 by aducobu          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../include/philo.h"
 
-int	ft_atoi(const char *str)
+int	init_data(t_data *data, char **argv, int argc)
 {
-	int		i;
-	long	n;
-
-	i = 0;
-	n = 0;
-	while (str[i] == 32 || (str[i] >= 9 && str[i] <= 13))
-		i++;
-	if (str[i] == '-' || str[i] == '+')
-	{
-		if (str[i] == '-')
-			return (-1);
-		i++;
-	}
-	while (str[i])
-	{
-		if (!(str[i] >= '0' && str[i] <= '9'))
-			return (-1);
-		while (str[i] >= '0' && str[i] <= '9')
-			n = n * 10 + (str[i++] - 48);
-		if (n > 2147483647)
-			return (-1);
-	}
-	return (n);
+	memset(data, 0, sizeof(t_data));
+	data->argv = argv;
+	data->argc = argc;
+	data->nb_philo = ft_atoi(argv[1]);
+	data->time_to_die = ft_atoi(argv[2]);
+	data->time_to_eat = ft_atoi(argv[3]);
+	data->time_to_sleep = ft_atoi(argv[4]);
+	data->meals = -1;
+	if (argc == 6)
+		data->meals = ft_atoi(argv[5]);
+	if (data->meals == 0 || data->nb_philo == 0)
+		return (0);
+	return (1);
 }
 
 int	parsing(int argc, char **argv, t_data *data)
@@ -49,8 +39,6 @@ int	parsing(int argc, char **argv, t_data *data)
 	{
 		while (i < argc)
 		{
-			if (!argv[i])
-				num = -1;
 			num = ft_atoi(argv[i]);
 			if (num < 0)
 			{

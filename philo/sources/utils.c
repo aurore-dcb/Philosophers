@@ -6,11 +6,19 @@
 /*   By: aducobu <aducobu@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/19 14:18:44 by aducobu           #+#    #+#             */
-/*   Updated: 2023/10/19 15:54:11 by aducobu          ###   ########.fr       */
+/*   Updated: 2023/10/20 13:17:03 by aducobu          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../include/philo.h"
+
+long long get_actual_time(void)
+{
+	struct timeval now;
+
+	gettimeofday(&now, NULL);
+	return (now.tv_sec * 1000 + now.tv_usec / 1000);
+}
 
 void	my_usleep(unsigned int time_to_wait)
 {
@@ -30,36 +38,31 @@ void	my_usleep(unsigned int time_to_wait)
 	}
 }
 
-void	free_all(t_data *data)
+int	ft_atoi(const char *str)
 {
-	int	i;
+	int		i;
+	long	n;
 
 	i = 0;
-	while (i < data->nb_philo)
+	n = 0;
+	if (!str)
+		return (-1);
+	while (str[i] == 32 || (str[i] >= 9 && str[i] <= 13))
+		i++;
+	if (str[i] == '-' || str[i] == '+')
 	{
-		pthread_mutex_destroy(&data->forks[i]);
-		pthread_mutex_destroy(&data->philo[i].eat_mutex);
+		if (str[i] == '-')
+			return (-1);
 		i++;
 	}
-	pthread_mutex_destroy(&data->printf_mutex);
-	pthread_mutex_destroy(&data->flag_mutex);
-	free(data->forks);
-	free(data->philo);
-}
-
-long int	get_actual_time(void)
-{
-	struct timeval	now;
-
-	gettimeofday(&now, NULL);
-	return ((now.tv_sec * 1000 + now.tv_usec / 1000));
-}
-
-int	ft_check_flag(t_data *data)
-{
-	pthread_mutex_lock(&data->flag_mutex);
-	if (data->flag_death == 1)
-		return (pthread_mutex_unlock(&data->flag_mutex), 1);
-	pthread_mutex_unlock(&data->flag_mutex);
-	return (0);
+	while (str[i])
+	{
+		if (!(str[i] >= '0' && str[i] <= '9'))
+			return (-1);
+		while (str[i] >= '0' && str[i] <= '9')
+			n = n * 10 + (str[i++] - 48);
+		if (n > 2147483647)
+			return (-1);
+	}
+	return (n);
 }
